@@ -1,15 +1,18 @@
 import { collection, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from "./firebase-config.js";
+// import { collection, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
 
 // =================== REGISTRAR / ACTUALIZAR ===================
 document.getElementById("registro").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombre = document.getElementById("nombre").value.trim();
-    const telefono = document.getElementById("telefono").value.trim();
+    const nombre = document.getElementById("nombre").value;
+    const telefono = document.getElementById("telefono").value;
     const plan = parseInt(document.getElementById("plan").value);
     const valorPagado = parseInt(document.getElementById("valorPagado").value);
     const fechaIngresoInput = document.getElementById("fechaIngreso").value;
+    const metodoPago = document.getElementById("metodoPago").value;
 
     if (!fechaIngresoInput) {
         document.getElementById("resultado").innerText = "❌ Fecha de ingreso no válida.";
@@ -24,6 +27,7 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
         case 2: diasAAgregar = 15; break;
         case 3: diasAAgregar = 30; break;
         case 4: diasAAgregar = 60; break;
+        case 5: diasAAgregar = 90; break;
         default: diasAAgregar = 30; break;
     }
 
@@ -37,6 +41,7 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
         await setDoc(doc(db, "clientes", telefono), {
             nombre,
             telefono,
+            metodoPago: metodoPago,
             tipoPlan: plan,
             valorPago: valorPagado,
             fechaIngreso: fechaIngresoStr,
@@ -53,8 +58,6 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
 
         document.getElementById("registro").reset();
         document.getElementById("telefonoBusqueda").value = "";
-        document.getElementById("btnEliminar").style.display = "none";
-
         verificarVencimientos();
 
     } catch (error) {
@@ -63,39 +66,11 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
     }
 });
 
-// =================== ELIMINAR CLIENTE ===================
-// document.getElementById("btnEliminar").addEventListener("click", async () => {
-//     const telefono = document.getElementById("telefono").value.trim();
-//     const nombre = document.getElementById("nombre").value.trim();
-
-//     if (!telefono) {
-//         alert("Busca un cliente para poder eliminarlo.");
-//         return;
-//     }
-
-//     const confirmar = confirm(`¿Estás seguro de que quieres eliminar a ${nombre} (${telefono})? Esta acción no se puede deshacer.`);
-//     if (!confirmar) return;
-
-//     try {
-//         await deleteDoc(doc(db, "clientes", telefono));
-//         console.log(`✅ Cliente ${telefono} eliminado de Firestore.`);
-//         document.getElementById("resultado").innerText = `✅ Cliente ${nombre} eliminado correctamente.`;
-//         document.getElementById("registro").reset();
-//         document.getElementById("telefonoBusqueda").value = "";
-//         document.getElementById("btnEliminar").style.display = "none";
-//         verificarVencimientos();
-//     } catch (error) {
-//         console.error("Error al eliminar:", error);
-//         document.getElementById("resultado").innerText = "❌ Error al eliminar el cliente.";
-//     }
-// });
-
-// // Ocultar botón de eliminar al inicio
-// document.getElementById("btnEliminar").style.display = "none";
+// =================== ELIMINAR USUARIO ===================
 
 // =================== BUSCAR POR TELÉFONO ===================
 window.buscarCliente = async function () {
-    const telefono = document.getElementById("telefonoBusqueda").value.trim();
+    const telefono = document.getElementById("telefonoBusqueda").value;
     if (!telefono) return alert("Ingresa un número de teléfono.");
 
     const ref = doc(db, "clientes", telefono);
@@ -111,18 +86,15 @@ window.buscarCliente = async function () {
             : "<span class='estado-vencido'>Vencido</span>";
         document.getElementById("resultado").innerHTML =
             `✅ Cliente encontrado. Estado de la membresía: ${estado}`;
-
-        document.getElementById("btnEliminar").style.display = "inline-block";
     } else {
         document.getElementById("resultado").innerText = "⚠️ Cliente no encontrado.";
         document.getElementById("registro").reset();
-        document.getElementById("btnEliminar").style.display = "none";
     }
 };
 
 // =================== BUSCAR POR NOMBRE ===================
 window.buscarClientePorApellido = async function () {
-    const texto = document.getElementById("apellidoBusqueda").value.trim().toLowerCase();
+    const texto = document.getElementById("apellidoBusqueda").value.toLowerCase();
     const container = document.getElementById("resultadosBusquedaApellido");
     if (!texto) return alert("Ingresa un nombre para buscar.");
 
@@ -146,7 +118,6 @@ window.buscarClientePorApellido = async function () {
                 llenarFormulario(c);
                 document.getElementById("resultado").innerHTML = `✅ Cliente seleccionado: <strong>${c.nombre}</strong>`;
                 document.getElementById("telefonoBusqueda").value = tel;
-                document.getElementById("btnEliminar").style.display = "inline-block";
             }
         });
     });
@@ -159,6 +130,7 @@ function llenarFormulario(c) {
     document.getElementById("plan").value = c.tipoPlan || "1";
     document.getElementById("fechaIngreso").value = c.fechaIngreso || "";
     document.getElementById("valorPagado").value = c.valorPago || "";
+    document.getElementById("metodoPago").value = c.metodoPago || "1";
 }
 
 // =================== ALERTA DE VENCIMIENTOS ===================
@@ -176,7 +148,10 @@ async function verificarVencimientos() {
     let found = false;
     snapshot.forEach(docu => {
         const c = docu.data();
+        console.log("➡️ Cliente:", c);
+
         const fechaCliente = new Date(c.fechaVencimiento).toISOString().split("T")[0];
+        console.log(`🔍 Comparando ${fechaCliente} con ${fechaObjetivo}`);
 
         if (fechaCliente === fechaObjetivo) {
             found = true;
@@ -192,6 +167,7 @@ async function verificarVencimientos() {
                         </a>
                     </p>
                 </div>`;
+
         }
     });
 
@@ -222,7 +198,7 @@ window.generarReporteExcel = async function () {
 
     try {
         const snapshot = await getDocs(collection(db, "clientes"));
-        const data = [["Nombre", "Teléfono", "Tipo de Plan", "Valor Pagado", "Fecha de Ingreso", "Fecha de Vencimiento"]];
+        const data = [["Nombre", "Teléfono", "Tipo de Plan", "Valor Pagado", "Fecha de Ingreso","Método de Pago", "Fecha de Vencimiento"]];
         snapshot.forEach(docu => {
             const c = docu.data();
             const ingreso = new Date(c.fechaIngreso);
@@ -233,9 +209,11 @@ window.generarReporteExcel = async function () {
                     c.tipoPlan === 1 ? "Semanal" :
                         c.tipoPlan === 2 ? "Quincena" :
                             c.tipoPlan === 3 ? "Mensual" :
-                                c.tipoPlan === 4 ? "Bimestral" : "Otro",
+                                c.tipoPlan === 4 ? "Bimestral" :
+                                    c.tipoPlan === 5 ? "Trimestral" : "Otro",
                     c.valorPago || 0,
                     c.fechaIngreso || "",
+                    c.metodoPago || "",
                     c.fechaVencimiento || ""
                 ]);
             }

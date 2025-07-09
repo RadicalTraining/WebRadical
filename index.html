@@ -37,9 +37,6 @@
                         <label>Teléfono:</label>
                         <input type="text" id="telefono" required>
                     </div>
-                </div>
-
-                <div class="input-row">
                     <div class="input-group">
                         <label>Tipo de plan:</label>
                         <select id="plan">
@@ -47,8 +44,12 @@
                             <option value="2">Quincena</option>
                             <option value="3">Mensual</option>
                             <option value="4">Bimestral</option>
+                            <option value="5">Trimestral</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="input-row">
                     <div class="input-group">
                         <label>Fecha de pago:</label>
                         <input type="date" id="fechaIngreso" required>
@@ -57,12 +58,19 @@
                         <label>Valor pagado:</label>
                         <input type="number" id="valorPagado" required>
                     </div>
+                    <div class="input-group">
+                        <label>Método de pago:</label>
+                        <select id="metodoPago">
+                            <option value="1">Efectivo</option>
+                            <option value="2">Transferencia</option>
+                        </select>
+                    </div>
                 </div>
 
                 <button type="submit">💾 Registrar / Actualizar</button>
-                <!-- <button type="submit" id="btnEliminar"
+                <button type="submit" id="btnEliminar"
                     style="display: none;">🗑️
-                    Eliminar cliente</button> -->
+                    Eliminar cliente</button>
             </form>
 
             <div class="reporte-excel-box">
