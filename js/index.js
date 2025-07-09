@@ -1,12 +1,12 @@
-import { collection, doc, setDoc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { collection, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from "./firebase-config.js";
 
 // =================== REGISTRAR / ACTUALIZAR ===================
 document.getElementById("registro").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombre = document.getElementById("nombre").value;
-    const telefono = document.getElementById("telefono").value;
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
     const plan = parseInt(document.getElementById("plan").value);
     const valorPagado = parseInt(document.getElementById("valorPagado").value);
     const fechaIngresoInput = document.getElementById("fechaIngreso").value;
@@ -53,6 +53,8 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
 
         document.getElementById("registro").reset();
         document.getElementById("telefonoBusqueda").value = "";
+        document.getElementById("btnEliminar").style.display = "none";
+
         verificarVencimientos();
 
     } catch (error) {
@@ -61,9 +63,39 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
     }
 });
 
+// =================== ELIMINAR CLIENTE ===================
+// document.getElementById("btnEliminar").addEventListener("click", async () => {
+//     const telefono = document.getElementById("telefono").value.trim();
+//     const nombre = document.getElementById("nombre").value.trim();
+
+//     if (!telefono) {
+//         alert("Busca un cliente para poder eliminarlo.");
+//         return;
+//     }
+
+//     const confirmar = confirm(`¿Estás seguro de que quieres eliminar a ${nombre} (${telefono})? Esta acción no se puede deshacer.`);
+//     if (!confirmar) return;
+
+//     try {
+//         await deleteDoc(doc(db, "clientes", telefono));
+//         console.log(`✅ Cliente ${telefono} eliminado de Firestore.`);
+//         document.getElementById("resultado").innerText = `✅ Cliente ${nombre} eliminado correctamente.`;
+//         document.getElementById("registro").reset();
+//         document.getElementById("telefonoBusqueda").value = "";
+//         document.getElementById("btnEliminar").style.display = "none";
+//         verificarVencimientos();
+//     } catch (error) {
+//         console.error("Error al eliminar:", error);
+//         document.getElementById("resultado").innerText = "❌ Error al eliminar el cliente.";
+//     }
+// });
+
+// // Ocultar botón de eliminar al inicio
+// document.getElementById("btnEliminar").style.display = "none";
+
 // =================== BUSCAR POR TELÉFONO ===================
 window.buscarCliente = async function () {
-    const telefono = document.getElementById("telefonoBusqueda").value;
+    const telefono = document.getElementById("telefonoBusqueda").value.trim();
     if (!telefono) return alert("Ingresa un número de teléfono.");
 
     const ref = doc(db, "clientes", telefono);
@@ -79,15 +111,18 @@ window.buscarCliente = async function () {
             : "<span class='estado-vencido'>Vencido</span>";
         document.getElementById("resultado").innerHTML =
             `✅ Cliente encontrado. Estado de la membresía: ${estado}`;
+
+        document.getElementById("btnEliminar").style.display = "inline-block";
     } else {
         document.getElementById("resultado").innerText = "⚠️ Cliente no encontrado.";
         document.getElementById("registro").reset();
+        document.getElementById("btnEliminar").style.display = "none";
     }
 };
 
 // =================== BUSCAR POR NOMBRE ===================
 window.buscarClientePorApellido = async function () {
-    const texto = document.getElementById("apellidoBusqueda").value.toLowerCase();
+    const texto = document.getElementById("apellidoBusqueda").value.trim().toLowerCase();
     const container = document.getElementById("resultadosBusquedaApellido");
     if (!texto) return alert("Ingresa un nombre para buscar.");
 
@@ -111,6 +146,7 @@ window.buscarClientePorApellido = async function () {
                 llenarFormulario(c);
                 document.getElementById("resultado").innerHTML = `✅ Cliente seleccionado: <strong>${c.nombre}</strong>`;
                 document.getElementById("telefonoBusqueda").value = tel;
+                document.getElementById("btnEliminar").style.display = "inline-block";
             }
         });
     });
@@ -140,10 +176,7 @@ async function verificarVencimientos() {
     let found = false;
     snapshot.forEach(docu => {
         const c = docu.data();
-        console.log("➡️ Cliente:", c);
-
         const fechaCliente = new Date(c.fechaVencimiento).toISOString().split("T")[0];
-        console.log(`🔍 Comparando ${fechaCliente} con ${fechaObjetivo}`);
 
         if (fechaCliente === fechaObjetivo) {
             found = true;
@@ -151,11 +184,14 @@ async function verificarVencimientos() {
             const link = `https://wa.me/57${c.telefono}?text=${mensaje}`;
 
             container.innerHTML += `
-    <div class="vencimiento-card">
-        <p><strong>${c.nombre}</strong> (${c.telefono}) vence el <strong>${c.fechaVencimiento}</strong></p>
-        <a href="${link}" target="_blank" class="whatsapp-btn">📲 Enviar WhatsApp</a>
-    </div>`;
-
+                <div class="vencimiento-card">
+                    <p>
+                        <strong>${c.nombre}</strong> (${c.telefono}) vence el <strong>${c.fechaVencimiento}</strong>
+                        <a href="${link}" target="_blank" class="whatsapp-inline-icon" title="Enviar WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </p>
+                </div>`;
         }
     });
 
