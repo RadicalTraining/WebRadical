@@ -1,7 +1,6 @@
 import { collection, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from "./firebase-config.js";
-// import { collection, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
+// import ExcelJS from "https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js";
 
 // =================== REGISTRAR / ACTUALIZAR ===================
 document.getElementById("registro").addEventListener("submit", async (e) => {
@@ -12,7 +11,7 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
     const plan = parseInt(document.getElementById("plan").value);
     const valorPagado = parseInt(document.getElementById("valorPagado").value);
     const fechaIngresoInput = document.getElementById("fechaIngreso").value;
-    const metodoPago = document.getElementById("metodoPago").value;
+    const metodoPago = parseInt(document.getElementById("metodoPago").value); // AHORA NÚMERO
 
     if (!fechaIngresoInput) {
         document.getElementById("resultado").innerText = "❌ Fecha de ingreso no válida.";
@@ -41,7 +40,7 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
         await setDoc(doc(db, "clientes", telefono), {
             nombre,
             telefono,
-            metodoPago: metodoPago,
+            metodoPago: metodoPago, // Ya guardado como número
             tipoPlan: plan,
             valorPago: valorPagado,
             fechaIngreso: fechaIngresoStr,
@@ -65,8 +64,6 @@ document.getElementById("registro").addEventListener("submit", async (e) => {
         document.getElementById("resultado").innerText = "❌ Error al guardar los datos.";
     }
 });
-
-// =================== ELIMINAR USUARIO ===================
 
 // =================== BUSCAR POR TELÉFONO ===================
 window.buscarCliente = async function () {
@@ -143,16 +140,11 @@ async function verificarVencimientos() {
     const mañana = new Date();
     mañana.setDate(mañana.getDate() + 1);
     const fechaObjetivo = mañana.toISOString().split("T")[0];
-    console.log("📆 Fecha objetivo (mañana):", fechaObjetivo);
 
     let found = false;
     snapshot.forEach(docu => {
         const c = docu.data();
-        console.log("➡️ Cliente:", c);
-
         const fechaCliente = new Date(c.fechaVencimiento).toISOString().split("T")[0];
-        console.log(`🔍 Comparando ${fechaCliente} con ${fechaObjetivo}`);
-
         if (fechaCliente === fechaObjetivo) {
             found = true;
             const mensaje = encodeURIComponent(`Hola ${c.nombre}, tu membresía en Radical Training vence el ${c.fechaVencimiento}. ¡Te esperamos para seguir entrenando!`);
@@ -167,7 +159,6 @@ async function verificarVencimientos() {
                         </a>
                     </p>
                 </div>`;
-
         }
     });
 
@@ -178,7 +169,7 @@ async function verificarVencimientos() {
 
 verificarVencimientos();
 
-// =================== REPORTE EXCEL ===================
+// =================== REPORTE EXCEL CON TABLA REAL ===================
 window.generarReporteExcel = async function () {
     const inicioStr = document.getElementById("fechaInicioReporte").value;
     const finStr = document.getElementById("fechaFinReporte").value;
@@ -198,12 +189,13 @@ window.generarReporteExcel = async function () {
 
     try {
         const snapshot = await getDocs(collection(db, "clientes"));
-        const data = [["Nombre", "Teléfono", "Tipo de Plan", "Valor Pagado", "Fecha de Ingreso","Método de Pago", "Fecha de Vencimiento"]];
+        const rows = [];
+
         snapshot.forEach(docu => {
             const c = docu.data();
             const ingreso = new Date(c.fechaIngreso);
             if (ingreso >= inicio && ingreso <= fin) {
-                data.push([
+                rows.push([
                     c.nombre || "",
                     c.telefono || "",
                     c.tipoPlan === 1 ? "Semanal" :
@@ -213,22 +205,49 @@ window.generarReporteExcel = async function () {
                                     c.tipoPlan === 5 ? "Trimestral" : "Otro",
                     c.valorPago || 0,
                     c.fechaIngreso || "",
-                    c.metodoPago || "",
+                    c.metodoPago === 1 ? "Efectivo" :
+                        c.metodoPago === 2 ? "Transferencia" : "Otro",
                     c.fechaVencimiento || ""
                 ]);
             }
         });
 
-        if (data.length <= 1) {
+        if (rows.length === 0) {
             mensaje.innerText = "No hay datos en ese rango.";
             mensaje.style.color = "red";
             return;
         }
 
-        const ws = XLSX.utils.aoa_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "ReportePagos");
-        XLSX.writeFile(wb, `Reporte_${inicioStr}_a_${finStr}.xlsx`);
+        const workbook = new window.ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("ReportePagos");
+
+        worksheet.columns = [
+            { header: "Nombre", key: "nombre" },
+            { header: "Teléfono", key: "telefono" },
+            { header: "Tipo de Plan", key: "tipoPlan" },
+            { header: "Valor Pagado", key: "valorPagado" },
+            { header: "Fecha de Ingreso", key: "fechaIngreso" },
+            { header: "Método de Pago", key: "metodoPago" },
+            { header: "Fecha de Vencimiento", key: "fechaVencimiento" }
+        ];
+
+        worksheet.addRows(rows);
+
+        worksheet.addTable({
+            name: "TablaPagos",
+            ref: "A1",
+            headerRow: true,
+            totalsRow: false,
+            columns: worksheet.columns.map(col => ({ name: col.header })),
+            rows: rows
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/octet-stream" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Reporte_${inicioStr}_a_${finStr}.xlsx`;
+        link.click();
 
         mensaje.innerText = "✅ Reporte generado.";
         mensaje.style.color = "green";
