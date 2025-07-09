@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+    padding: 20px;
+    margin: 0;
+    color: #2c3e50;
+    /* Aseguramos que el body no tenga un ancho fijo que pueda causar scroll horizontal */
+    overflow-x: hidden;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 700;
+    color: #00695c;
+}
+
+form,
+.form-box,
+.result-box,
+.alertas-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+label {
+    font-weight: 500;
+    margin-top: 10px;
+    display: block;
+}
+
+.input-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    /* Mantiene el wrap para que los elementos se apilen en pantallas pequeñas */
+}
+
+.input-group {
+    flex: 1;
+    min-width: 200px;
+    /* Asegura que cada grupo de input tenga un mínimo de ancho */
+}
+
+input,
+select {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s;
+    /* Ajustes para táctil */
+    -webkit-appearance: none;
+    /* Evita estilos nativos en iOS */
+    -moz-appearance: none;
+    /* Evita estilos nativos en Firefox */
+    appearance: none;
+    touch-action: manipulation;
+    /* Mejora la respuesta táctil */
+}
+
+input:focus,
+select:focus {
+    border-color: #26a69a;
+    outline: none;
+}
+
+button {
+    background-color: #00796b;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    margin-top: 10px;
+    /* Ajustes para táctil */
+    -webkit-tap-highlight-color: transparent;
+    /* Elimina el resplandor azul al tocar en iOS */
+}
+
+button:hover {
+    background-color: #004d40;
+}
+
+.estado-activo {
+    color: #43a047;
+    font-weight: bold;
+}
+
+.estado-vencido {
+    color: #e53935;
+    font-weight: bold;
+}
+
+.whatsapp-link {
+    display: inline-block;
+    background-color: #25D366;
+    color: white;
+    padding: 10px 16px;
+    margin-top: 8px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.whatsapp-link:hover {
+    background-color: #1ebe5d;
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+        /* Reduce el padding general del body */
+    }
+
+    form,
+    .form-box,
+    .result-box,
+    .alertas-box {
+        padding: 15px;
+        /* Reduce el padding interno de las cajas */
+        margin: 10px auto;
+        /* Centra las cajas con un margen más pequeño */
+        border-radius: 10px;
+        /* Bordes un poco menos redondeados si se desea */
+    }
+
+    h2 {
+        font-size: 22px;
+        /* Un poco más pequeño el título */
+    }
+
+    .input-row {
+        flex-direction: column;
+        /* Apila los inputs verticalmente */
+        gap: 0;
+        /* Elimina el gap horizontal cuando están apilados */
+    }
+
+    .input-group {
+        min-width: unset;
+        /* Permite que el ancho se ajuste al 100% en columnas */
+        width: 100%;
+        /* Asegura que cada input-group ocupe todo el ancho disponible */
+        margin-bottom: 5px;
+        /* Espacio entre los grupos de input apilados */
+    }
+
+    label {
+        margin-top: 10px;
+        /* Mantener un buen margen superior para las etiquetas */
+        margin-bottom: 5px;
+        /* Reducir el margen inferior de las etiquetas */
+    }
+
+    input,
+    select {
+        margin-bottom: 10px;
+        /* Espacio entre inputs */
+        padding: 12px;
+        /* Aumenta un poco el padding de los inputs para facilitar el toque */
+        font-size: 16px;
+        /* Asegura un tamaño de fuente legible */
+    }
+
+    button {
+        padding: 14px;
+        /* Aumenta un poco el padding de los botones para facilitar el toque */
+        font-size: 17px;
+        /* Tamaño de fuente legible en botones */
+        margin-top: 15px;
+        /* Más espacio sobre los botones */
+    }
+
+    .search-by-apellido {
+        margin-top: 20px;
+        /* Ajusta el margen superior del bloque de búsqueda por apellido */
+    }
+
+    #resultadosBusquedaApellido li {
+        font-size: 14px;
+        /* Tamaño de fuente para los elementos de la lista de resultados */
+        padding: 8px;
+        /* Padding para hacerlos más fáciles de tocar */
+    }
+}
+
+.vencimiento-card {
+    background-color: #f9f9f9;
+    border-left: 5px solid #25D366;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.whatsapp-btn {
+    display: inline-block;
+    background-color: #25D366;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1eb84c;
+}

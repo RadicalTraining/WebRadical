@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gestión de Clientes - Radical Training</title>
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+    <body>
+        <h2>Gestión de Clientes - Radical Training</h2>
+
+        <div class="form-box">
+            <label>Teléfono (para búsqueda):</label>
+            <input type="text" id="telefonoBusqueda"
+                placeholder="Ingrese número de teléfono" required>
+            <button type="button" onclick="buscarCliente()">🔍 Buscar
+                cliente</button>
+
+            <div class="search-by-nombre">
+                <label>Buscar por Nombre:</label>
+                <input type="text" id="apellidoBusqueda">
+                <button type="button" onclick="buscarClientePorApellido()">🔍
+                    Buscar</button>
+                <div id="resultadosBusquedaApellido"></div>
+            </div>
+
+            <form id="registro">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="nombre" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Teléfono:</label>
+                        <input type="text" id="telefono" required>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Tipo de plan:</label>
+                        <select id="plan">
+                            <option value="1">Semanal</option>
+                            <option value="2">Quincena</option>
+                            <option value="3">Mensual</option>
+                            <option value="4">Bimestral</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Fecha de pago:</label>
+                        <input type="date" id="fechaIngreso" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Valor pagado:</label>
+                        <input type="number" id="valorPagado" required>
+                    </div>
+                </div>
+
+                <button type="submit">💾 Registrar / Actualizar</button>
+            </form>
+
+            <div class="reporte-excel-box">
+                <h3>📊 Generar Reporte de Pagos</h3>
+                <label for="fechaInicioReporte">Fecha de Inicio:</label>
+                <input type="date" id="fechaInicioReporte">
+                <label for="fechaFinReporte">Fecha Fin:</label>
+                <input type="date" id="fechaFinReporte">
+                <button type="button" onclick="generarReporteExcel()">📥
+                    Descargar Reporte Excel</button>
+                <p id="mensajeReporte"></p>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <h3>Resultado:</h3>
+            <p id="resultado"></p>
+        </div>
+
+        <div class="alertas-box">
+            <h3>🔔 Clientes que vencen mañana</h3>
+            <div id="vencenManana"></div>
+        </div>
+
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script type="module" src="js/index.js"></script>
+    </body>
+</html>
