@@ -4,99 +4,171 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Gestión de Clientes - Radical Training</title>
-        <link rel="stylesheet" href="css/index.css">
-        <!-- FontAwesome CDN -->
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/btn-whatsapp.css">
     </head>
     <body>
-        <h2>Gestión de Clientes - Radical Training 1.0</h2>
-
-        <div class="form-box">
-            <label>Teléfono (para búsqueda):</label>
-            <input type="text" id="telefonoBusqueda"
-                placeholder="Ingrese número de teléfono" required>
-            <button type="button" onclick="buscarCliente()">🔍 Buscar
-                cliente</button>
-
-            <div class="search-by-nombre">
-                <label>Buscar por Nombre:</label>
-                <input type="text" id="apellidoBusqueda">
-                <button type="button" onclick="buscarClientePorApellido()">🔍
-                    Buscar</button>
-                <div id="resultadosBusquedaApellido"></div>
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-users"></i> Radical Training 1.0</h1>
+                <!-- <p>Sistema de Gestión de Clientes v2.0</p> -->
             </div>
 
-            <form id="registro">
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Nombre:</label>
-                        <input type="text" id="nombre" required>
+            <div class="grid">
+                <!-- Búsqueda de Clientes -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-search"></i>
+                        <h3>Búsqueda de Clientes</h3>
                     </div>
-                    <div class="input-group">
-                        <label>Teléfono:</label>
-                        <input type="text" id="telefono" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Tipo de plan:</label>
-                        <select id="plan">
-                            <option value="1">Semanal</option>
-                            <option value="2">Quincena</option>
-                            <option value="3">Mensual</option>
-                            <option value="4">Bimestral</option>
-                            <option value="5">Trimestral</option>
-                        </select>
+
+                    <div class="search-section">
+                        <div class="search-group">
+                            <label for="telefonoBusqueda">Buscar por
+                                Teléfono</label>
+                            <input type="text" id="telefonoBusqueda"
+                                placeholder="Ingrese número de teléfono">
+                            <button type="button" class="btn btn-primary"
+                                onclick="buscarCliente()">
+                                <i class="fas fa-search"></i> Buscar Cliente
+                            </button>
+                        </div>
+
+                        <div class="search-group">
+                            <label for="apellidoBusqueda">Buscar por
+                                Nombre</label>
+                            <input type="text" id="apellidoBusqueda"
+                                placeholder="Ingrese nombre o apellido">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="buscarClientePorApellido()">
+                                <i class="fas fa-user-search"></i> Buscar
+                            </button>
+                            <div id="resultadosBusquedaApellido"
+                                class="search-results"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Fecha de pago:</label>
-                        <input type="date" id="fechaIngreso" required>
+                <!-- Formulario de Registro -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-plus"></i>
+                        <h3>Registro de Cliente</h3>
                     </div>
-                    <div class="input-group">
-                        <label>Valor pagado:</label>
-                        <input type="number" id="valorPagado" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Método de pago:</label>
-                        <select id="metodoPago">
-                            <option value="1">Efectivo</option>
-                            <option value="2">Transferencia</option>
-                        </select>
-                    </div>
+
+                    <form id="registro">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre Completo</label>
+                                <input type="text" id="nombre"
+                                    placeholder="Ingrese nombre completo"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="number" id="telefono"
+                                    placeholder="Número de teléfono" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="plan">Tipo de Plan</label>
+                                <select id="plan">
+                                    <option value="1">Semanal</option>
+                                    <option value="2">Quincenal</option>
+                                    <option value="3">Mensual</option>
+                                    <option value="4">Bimestral</option>
+                                    <option value="5">Trimestral</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaIngreso">Fecha de Pago</label>
+                                <input type="date" id="fechaIngreso" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="valorPagado">Valor Pagado</label>
+                                <input type="number" id="valorPagado"
+                                    placeholder="Monto pagado" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="metodoPago">Método de Pago</label>
+                                <select id="metodoPago">
+                                    <option value="1">Efectivo</option>
+                                    <option value="2">Transferencia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Registrar / Actualizar
+                        </button>
+                        <button type="button" id="btnEliminar"
+                            class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Eliminar Cliente
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Reportes -->
+            <div class="card card-full">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Generar Reporte de Pagos</h3>
                 </div>
 
-                <button type="submit">💾 Registrar / Actualizar</button>
-                <button type="submit" id="btnEliminar"
-                    style="display: none;">🗑️
-                    Eliminar cliente</button>
-            </form>
-
-            <div class="reporte-excel-box">
-                <h3>📊 Generar Reporte de Pagos</h3>
-                <label for="fechaInicioReporte">Fecha de Inicio:</label>
-                <input type="date" id="fechaInicioReporte">
-                <label for="fechaFinReporte">Fecha Fin:</label>
-                <input type="date" id="fechaFinReporte">
-                <button type="button" onclick="generarReporteExcel()">📥
-                    Descargar Reporte Excel</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fechaInicioReporte">Fecha de Inicio</label>
+                        <input type="date" id="fechaInicioReporte">
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFinReporte">Fecha Fin</label>
+                        <input type="date" id="fechaFinReporte">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn btn-success"
+                            onclick="generarReporteExcel()">
+                            <i class="fas fa-file-excel"></i> Descargar Reporte
+                            Excel
+                        </button>
+                    </div>
+                </div>
                 <p id="mensajeReporte"></p>
             </div>
-        </div>
-
-        <div class="result-box">
-            <h3>Resultado:</h3>
-            <p id="resultado"></p>
-        </div>
-
-        <div class="alertas-box">
-            <h3>🔔 Clientes que vencen mañana</h3>
-            <div id="vencenManana"></div>
+            <br>
+            <!-- Resultados -->
+            <div class="card card-full results-section">
+                <div class="card-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>Resultados</h3>
+                </div>
+                <div class="result-card">
+                    <p id="resultado">Esperando consulta...</p>
+                </div>
+            </div>
+            <br>
+            <!-- Alertas -->
+            <div class="card card-full">
+                <div class="alert-card">
+                    <h4>
+                        <i class="fas fa-bell"></i>
+                        Clientes que vencen mañana
+                    </h4>
+                    <div id="vencenManana">
+                        <p>No hay clientes que venzan mañana</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
         <script type="module" src="js/index.js"></script>
     </body>
 </html>

@@ -1,266 +1,444 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #747a97;
+    --primary-dark: #7e8296;
+    --secondary-color: #8d8d8d;
+    --accent-color: #f093fb;
+    --success-color: #4ade80;
+    --warning-color: #fbbf24;
+    --danger-color: #f87171;
+    --dark-color: #1f2937;
+    --light-color: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --white: #ffffff;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --border-radius: 16px;
+    --border-radius-sm: 8px;
+}
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to right, #e0f7fa, #f1f8e9);
-    padding: 20px;
-    margin: 0;
-    color: #2c3e50;
-    /* Aseguramos que el body no tenga un ancho fijo que pueda causar scroll horizontal */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #aeb1bd 0%, #79787cb5 100%);
+    min-height: 100vh;
+    color: var(--gray-800);
+    line-height: 1.6;
     overflow-x: hidden;
 }
 
-h2 {
-    text-align: center;
-    font-weight: 700;
-    color: #00695c;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
 }
 
-form,
-.form-box,
-.result-box,
-.alertas-box {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 20px auto;
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-xl);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.card-header i {
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.search-section {
+    margin-bottom: 2rem;
+}
+
+.search-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .form-row {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }
 
 label {
-    font-weight: 500;
-    margin-top: 10px;
     display: block;
-}
-
-.input-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    /* Mantiene el wrap para que los elementos se apilen en pantallas pequeñas */
-}
-
-.input-group {
-    flex: 1;
-    min-width: 200px;
-    /* Asegura que cada grupo de input tenga un mínimo de ancho */
+    font-weight: 500;
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 input,
 select {
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
     width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    transition: 0.3s;
-    /* Ajustes para táctil */
-    -webkit-appearance: none;
-    /* Evita estilos nativos en iOS */
-    -moz-appearance: none;
-    /* Evita estilos nativos en Firefox */
-    appearance: none;
-    touch-action: manipulation;
-    /* Mejora la respuesta táctil */
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--white);
+    color: var(--gray-800);
 }
 
 input:focus,
 select:focus {
-    border-color: #26a69a;
     outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-button {
-    background-color: #00796b;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
+input::placeholder {
+    color: var(--gray-400);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--border-radius-sm);
+    font-weight: 500;
+    font-size: 1rem;
     cursor: pointer;
-    transition: 0.3s;
-    width: 100%;
-    margin-top: 10px;
-    /* Ajustes para táctil */
-    -webkit-tap-highlight-color: transparent;
-    /* Elimina el resplandor azul al tocar en iOS */
-}
-
-button:hover {
-    background-color: #004d40;
-}
-
-.estado-activo {
-    color: #43a047;
-    font-weight: bold;
-}
-
-.estado-vencido {
-    color: #e53935;
-    font-weight: bold;
-}
-
-/* Inicio de estilos para botón eliminar */
-#btnEliminar{
-    background-color: #e53935;
-}
-#btEliminar:hover{
-    background-color: #b71c1c;
-}
-
-/* Inicia WhatsApp icon Styles */
-.whatsapp-link {
-    display: inline-block;
-    background-color: #25D366;
-    color: white;
-    padding: 10px 16px;
-    margin-top: 8px;
+    transition: all 0.3s ease;
     text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: 0.3s;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
-.whatsapp-link:hover {
-    background-color: #1ebe5d;
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--white);
+    box-shadow: var(--shadow-md);
 }
 
-.whatsapp-inline-icon {
-  margin-left: 10px;
-  color: #25D366;
-  text-decoration: none;
-  transition: transform 0.2s ease-in-out;
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
 
-.whatsapp-inline-icon i {
-  vertical-align: middle;
+.btn-secondary {
+    background: linear-gradient(135deg, var(--gray-600), var(--gray-700));
+    color: var(--white);
+    box-shadow: var(--shadow-md);
 }
 
-.whatsapp-inline-icon:hover {
-  transform: scale(1.3);
+.btn-secondary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
 
-.whatsapp-icon {
-  display: inline-block;
-  margin-top: 8px;
-  text-decoration: none;
-  transition: transform 0.2s ease-in-out;
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color), #22c55e);
+    color: var(--white);
+    box-shadow: var(--shadow-md);
 }
 
-.whatsapp-icon i {
-  color: #25D366;
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
 
-.whatsapp-icon:hover {
-  transform: scale(1.2);
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), #ef4444);
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+    display: none;
 }
-/* Finaliza WhatsApp icon Styles */
 
-/* Media Query para pantallas pequeñas */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-        /* Reduce el padding general del body */
-    }
+.btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+}
 
-    form,
-    .form-box,
-    .result-box,
-    .alertas-box {
-        padding: 15px;
-        /* Reduce el padding interno de las cajas */
-        margin: 10px auto;
-        /* Centra las cajas con un margen más pequeño */
-        border-radius: 10px;
-        /* Bordes un poco menos redondeados si se desea */
-    }
+/* .btn-whatsapp {
+    background: linear-gradient(135deg, #25D366, #1ebe5d);
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
 
-    h2 {
-        font-size: 22px;
-        /* Un poco más pequeño el título */
-    }
+.btn-whatsapp:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+} */
 
-    .input-row {
-        flex-direction: column;
-        /* Apila los inputs verticalmente */
-        gap: 0;
-        /* Elimina el gap horizontal cuando están apilados */
-    }
+.results-section {
+    grid-column: 1 / -1;
+}
 
-    .input-group {
-        min-width: unset;
-        /* Permite que el ancho se ajuste al 100% en columnas */
-        width: 100%;
-        /* Asegura que cada input-group ocupe todo el ancho disponible */
-        margin-bottom: 5px;
-        /* Espacio entre los grupos de input apilados */
-    }
+.result-card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary-color);
+}
 
-    label {
-        margin-top: 10px;
-        /* Mantener un buen margen superior para las etiquetas */
-        margin-bottom: 5px;
-        /* Reducir el margen inferior de las etiquetas */
-    }
+.alert-card {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 1px solid var(--warning-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-md);
+}
 
-    input,
-    select {
-        margin-bottom: 10px;
-        /* Espacio entre inputs */
-        padding: 12px;
-        /* Aumenta un poco el padding de los inputs para facilitar el toque */
-        font-size: 16px;
-        /* Asegura un tamaño de fuente legible */
-    }
-
-    button {
-        padding: 14px;
-        /* Aumenta un poco el padding de los botones para facilitar el toque */
-        font-size: 17px;
-        /* Tamaño de fuente legible en botones */
-        margin-top: 15px;
-        /* Más espacio sobre los botones */
-    }
-
-    .search-by-apellido {
-        margin-top: 20px;
-        /* Ajusta el margen superior del bloque de búsqueda por apellido */
-    }
-
-    #resultadosBusquedaApellido li {
-        font-size: 14px;
-        /* Tamaño de fuente para los elementos de la lista de resultados */
-        padding: 8px;
-        /* Padding para hacerlos más fáciles de tocar */
-    }
+.alert-card h4 {
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .vencimiento-card {
-    background-color: #f9f9f9;
-    border-left: 5px solid #25D366;
-    padding: 12px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background: var(--white);
+    border-radius: var(--border-radius-sm);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--success-color);
+    transition: all 0.3s ease;
 }
 
-.whatsapp-btn {
-    display: inline-block;
-    background-color: #25D366;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s ease-in-out;
+.vencimiento-card:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
 }
 
-.whatsapp-btn:hover {
-    background-color: #1eb84c;
+.status-active {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.status-expired {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+.search-results {
+    margin-top: 1rem;
+}
+
+.search-results ul {
+    list-style: none;
+    padding: 0;
+}
+
+.search-results li {
+    background: var(--gray-50);
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--primary-color);
+}
+
+.search-results li:hover {
+    background: var(--gray-100);
+    transform: translateX(2px);
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading .btn {
+    position: relative;
+}
+
+.loading .btn:after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mejoras adicionales */
+.card-full {
+    grid-column: 1 / -1;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.badge-success {
+    background: rgba(74, 222, 128, 0.1);
+    color: var(--success-color);
+}
+
+.badge-warning {
+    background: rgba(251, 191, 36, 0.1);
+    color: var(--warning-color);
+}
+
+.badge-danger {
+    background: rgba(248, 113, 113, 0.1);
+    color: var(--danger-color);
 }
