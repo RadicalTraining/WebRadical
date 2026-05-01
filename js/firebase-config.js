@@ -1,13 +1,12 @@
 /**
  * Configuración de Firebase.
- * Proyecto: manejo-65354
+ * Proyecto: Radical Training (radicaltraining-b1eec)
  */
 export const firebaseConfig = {
-  apiKey: "AIzaSyDbcFwU9csObsWGSPhGnz_ixiOkIDo_xX0",
-  authDomain: "manejo-65354.firebaseapp.com",
-  projectId: "manejo-65354",
-  storageBucket: "manejo-65354.firebasestorage.app",
-  messagingSenderId: "755604413866",
-  appId: "1:755604413866:web:e90fbe5d5e0b814cb71fd3",
-  measurementId: "G-K8RYF3G36P"
+  apiKey: "AIzaSyDLcPbnt7akPLP7wBeBgJvk6sB_5bRXvik",
+  authDomain: "radicaltraining-b1eec.firebaseapp.com",
+  projectId: "radicaltraining-b1eec",
+  storageBucket: "radicaltraining-b1eec.appspot.com",
+  messagingSenderId: "868998208820",
+  appId: "1:868998208820:web:17237c6ddf70bd3c061961",
 };
