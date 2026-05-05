@@ -1748,7 +1748,6 @@ document.getElementById("formUsuario").addEventListener("submit", async (e) => {
     const nombre = document.getElementById("nombre").value.trim();
     const apellido = document.getElementById("apellido").value.trim();
     const telefono = document.getElementById("telefono").value.trim();
-    const email = document.getElementById("email").value.trim();
     const planId = document.getElementById("nuevoUsuarioPlanId").value;
     const opt = nuevoUsuarioPlanId.selectedOptions[0];
     const duracionDias = Number(opt?.dataset.duracionDias || 30);
@@ -1768,7 +1767,7 @@ document.getElementById("formUsuario").addEventListener("submit", async (e) => {
       nombre,
       apellido,
       telefono,
-      email: email || null,
+      email: null,
       fechaRegistro: Timestamp.now(),
       estadoMembresia,
       membresiaActual: planId,
