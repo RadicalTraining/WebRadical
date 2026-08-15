@@ -937,6 +937,37 @@ body {
   color: var(--text-muted);
 }
 
+.input--textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+  line-height: 1.45;
+  font-family: inherit;
+}
+
+.form--mensajes-wa {
+  max-width: 560px;
+}
+
+.form--mensajes-wa .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-actions--mensajes-wa {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+#mensajes-whatsapp code {
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(126, 133, 157, 0.12);
+}
+
 select.input {
   cursor: pointer;
   appearance: none;
